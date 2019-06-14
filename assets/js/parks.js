@@ -41,8 +41,22 @@
                 }); 
                 console.log(nationalParks); 
             }
+        }) 
 
-        })   
-    }
+        populateSearchResults();
+    }; 
+
+    function populateSearchResults () {
+        var newRow = $("<tr>").append (
+            $("<td>").text(this.nationalParks.name),
+            $("<td>").text(this.nationalParks.designation),
+            $("<td>").text(this.nationalParks.url), 
+            console.log ("accessing populate search results function"), 
+        ); 
+    
+        $(".searchResults > tbody").append(newRow); 
+    }; 
+
+    
 
     
