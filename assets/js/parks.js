@@ -13,7 +13,8 @@
     var parkQueryURL = "https://developer.nps.gov/api/v1/parks?stateCode=PA&limit=10&api_key=TUzbrDxmdtDfjNLGofmsOXAmQ6WPMwukeORXBBHm"; 
     
 
-    parkFetcher(); 
+    parkFetcher();
+    initMap();  
 
     function parkFetcher () { 
         console.log("parkFetcher");
@@ -27,36 +28,51 @@
             var parks = response.data; 
             console.log(parks); 
 
-            for (var i = 0; i < parks.length; i++) { 
+            for (var i = 0; i < parks.length; i++) {
                 var currentPark =  parks[i]
-                var splitValue = currentPark.latLong.split(", ");
-                var lat = splitValue[0].split(":")[1]; 
-                var long = splitValue[1].split(":")[1];  
-                nationalParks.push({
-                    name:currentPark.fullName,
-                    type:currentPark.designation, 
-                    lat, 
-                    long, 
-                    url:currentPark.url, 
-                }); 
-                console.log(nationalParks); 
+                console.log('currentPark',currentPark.latLong)
+                if(currentPark.latLong === ''){
+                    i++;
+                }else {
+                    var splitValue = currentPark.latLong.split(", ");
+                    var lat = splitValue[0].split(":")[1];
+                    var long = splitValue[1].split(":")[1];
+                    nationalParks.push({
+                        name:currentPark.fullName,
+                        type:currentPark.designation,
+                        lat,
+                        long,
+                        url:currentPark.url,
+                    });
+                }
+                    console.log(nationalParks);
             }
-        }) 
-
-        populateSearchResults();
-    }; 
+           
+        })      
+        .then(populateSearchResults)
+    }
 
     function populateSearchResults () {
-        var newRow = $("<tr>").append (
-            $("<td>").text(this.nationalParks.name),
-            $("<td>").text(this.nationalParks.designation),
-            $("<td>").text(this.nationalParks.url), 
-            console.log ("accessing populate search results function"), 
-        ); 
-    
-        $(".searchResults > tbody").append(newRow); 
-    }; 
+        console.log(nationalParks,'nationalParks');
+        nationalParks.forEach(function(nationalPark){
+            var newRow = $("<tr>").append (
+                    $("<td>").html('<input type="checkbox" id="parkSelect"/>'),
+                    $("<td>").text(nationalPark.name),
+                    $("<td>").text(nationalPark.type),
+                    $("<td>").text(nationalPark.url)
+                );
+             $(".searchResults > tbody").append(newRow)
+        })
+    };
 
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+        // $("#map").html(map); 
+      }
     
 
     
