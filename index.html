@@ -12,8 +12,8 @@
     <h1>National Park Finder</h1>
 
     <!-- Search form -->
-<input class="form-control searchTerm" type="text" placeholder="Search" aria-label="Search">
-<button type="button" class="btn btn-primary search">Primary</button>
+<input class="form-control searchTerm" type="text" placeholder="Enter a state to find a park" aria-label="Search" id="stateSearch">
+<button type="button" class="btn btn-primary search" id="fetchParkState">Search by State</button>
 
 <table class="table searchResults">
     <thead>
@@ -30,7 +30,7 @@
   </table>
 
   <div class="container" id="map">
-    
+
   </div>
 
     <script src = "assets/js/parks.js"></script>

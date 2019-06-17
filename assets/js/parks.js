@@ -8,16 +8,26 @@
 
     // Vars for query URL 
     // api key
-    var apiKey = ""
+    // var stateCode = $("#stateSearch").val(); 
     //query URL 
-    var parkQueryURL = "https://developer.nps.gov/api/v1/parks?stateCode=PA&limit=10&api_key=TUzbrDxmdtDfjNLGofmsOXAmQ6WPMwukeORXBBHm"; 
+    // var parkQueryURL = "https://developer.nps.gov/api/v1/parks?" + stateCode + "&limit=10&api_key=TUzbrDxmdtDfjNLGofmsOXAmQ6WPMwukeORXBBHm"; 
     
 
-    parkFetcher();
-    initMap();  
+    // parkFetcher();
+    // initMap(); 
+    
+    $("#fetchParkState").on("click", function (){ 
+        parkFetcher(); 
+        console.log("state search"); 
+    })
 
     function parkFetcher () { 
         console.log("parkFetcher");
+
+        var stateCode = $(".searchTerm").val(); 
+        console.log(stateCode + "state code"); 
+        //query URL 
+        var parkQueryURL = "https://developer.nps.gov/api/v1/parks?stateCode=" + stateCode + "&limit=10&api_key=TUzbrDxmdtDfjNLGofmsOXAmQ6WPMwukeORXBBHm"; 
 
         $.ajax ({
             url:parkQueryURL, 
@@ -27,6 +37,7 @@
         .then(function (response){
             var parks = response.data; 
             console.log(parks); 
+            nationalParks = []; 
 
             for (var i = 0; i < parks.length; i++) {
                 var currentPark =  parks[i]
@@ -43,6 +54,7 @@
                         lat,
                         long,
                         url:currentPark.url,
+                        parkCode:currentPark.parkCode
                     });
                 }
                     console.log(nationalParks);
@@ -54,13 +66,16 @@
 
     function populateSearchResults () {
         console.log(nationalParks,'nationalParks');
+        $(".searchResults > tbody").empty();
+        console.log("clearedlist"); 
         nationalParks.forEach(function(nationalPark){
             var newRow = $("<tr>").append (
-                    $("<td>").html('<input type="checkbox" id="parkSelect"/>'),
+                    $("<td>").html('<input type="checkbox" id="parkSelect-'+nationalPark.parkCode+'"/>'),
                     $("<td>").text(nationalPark.name),
                     $("<td>").text(nationalPark.type),
                     $("<td>").text(nationalPark.url)
                 );
+                console.log("adding"); 
              $(".searchResults > tbody").append(newRow)
         })
     };
